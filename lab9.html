@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DB Manager</title>
+</head>
+<body>
+    <h1>DB Manager</h1>
+    <form id="create_db_form">
+        <label for="db_name">Database Name:</label>
+        <input type="text" id="db_name" name="db_name">
+        <button type="submit">Create Database</button>
+    </form>
+    <form id="execute_query_form">
+        <label for="query">SQL Query:</label>
+        <textarea id="query" name="query"></textarea>
+        <button type="submit">Execute Query</button>
+    </form>
+    <script>
+        document.getElementById('create_db_form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const dbName = document.getElementById('db_name').value;
+            fetch('/create_db', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ db_name: dbName })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            });
+        });
+
+        document.getElementById('execute_query_form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const query = document.getElementById('query').value;
+            fetch('/execute_query', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query: query })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.result);
+            });
+        });
+    </script>
+</body>
+</html>
